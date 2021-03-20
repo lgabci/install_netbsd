@@ -64,13 +64,20 @@ Install `wpa_supplicant`:
 sudo pkd_add wpa_supplicant
 ```
 
-Create **/etc/wpa_supplicant.conf**:
+Modify **/etc/wpa_supplicant.conf**:
+```
+# $NetBSD: wpa_supplicant.conf,v 1.1 2019/01/12 16:51:54 roy Exp $
+
+# Allow wpa_cli(8) to configure wpa_supplicant
+ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=wheel
+update_config=1
+```
 ```
 ctrl_interface=/var/run/wpa_supplicant
 ctrl_interface_group=wheel
-eapol_version=2
+update_config=0
 ap_scan=1
-fast_reauth=1
 
 network={
 	ssid="<SSID0>"
