@@ -12,11 +12,15 @@ echo "PKG_PATH=ftp://ftp.NetBSD.org/pub/pkgsrc/packages/$(uname)/$(uname -m)/$(u
 ```
 
 ### Set up CPU frequency scaling:
+Add to **/etc/rc.conf**
+```
+estd="yes"
+estd_flags=""
+```
+
 ```sh
 pkg_add estd
 cp /usr/pkg/share/examples/rc.d/estd /etc/rc.d/
-echo 'estd="yes"' >>/etc/rc.conf
-echo 'estd_flags=""' >>/etc/rc.conf
 /etc/rc.d/estd restart
 ```
 
