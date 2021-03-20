@@ -115,7 +115,7 @@ dhcpcd_flags="-q -b <NIC> <NIC>"
 sudo pkg_add bash bash_completion git icewm firefox emacs vim
 ```
 
-### Set `bash` for *username*'s shell
+Set `bash` for *username*'s shell
 ```sh
 sudo usermod -s /usr/pkg/bin/bash username
 ```
@@ -320,4 +320,33 @@ source /usr/pkg/share/vim/vim82/defaults.vim
 set tabstop=8
 set shiftwidth=2
 set expandtab
+```
+
+### Set up **mdns**:
+
+Add to **/etc/rc.conf**:
+```
+mdnsd=YES
+```
+
+Modify **/etc/nsswitch.conf**:
+```
+hosts:          files dns
+```
+```
+hosts:          files dns mdnsd
+```
+
+### Enable `ntpdate`
+
+Add to **/etc/rc.conf**:
+```
+ntpdate=YES
+```
+
+### Enable `xdm`
+
+Add to **/etc/rc.conf**:
+```
+xdm=YES
 ```
