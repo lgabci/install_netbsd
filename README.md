@@ -57,11 +57,53 @@ sudo pkgin update
 sudo pkgin upgrade
 ```
 
+### Set up WPA
+
+Create **/etc/wpa_supplicant.conf**:
+```
+ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=wheel
+eapol_version=2
+ap_scan=1
+fast_reauth=1
+
+network={
+	ssid="<SSID0>"
+	scan_ssid=0
+	priority=10
+	proto=RSN
+	key_mgmt=WPA-PSK
+	pairwise=CCMP
+	group=CCMP
+	psk="<PSK0>"
+}
+
+network={
+	ssid="<SSID1>"
+	scan_ssid=0
+	priority=5
+	proto=RSN
+	key_mgmt=WPA-PSK
+	pairwise=CCMP
+	group=CCMP
+	psk="<PSK1>"
+}
+```
+
+Add to **/etc/rc.conf**:
+```
+wpa_supplicant=YES
+wpa_supplicant_flags="-B -i <NIC> -c /etc/wpa_supplicant.conf"
+dhcpcd=YES
+dhcpcd_flags="-q -b <NIC> <NIC>"
+```
+
 ### Install necessary packages:
 ```sh
 sudo pkg_add bash bash_completion git icewm firefox emacs vim
 ```
 
+### Set `bash` for *username*'s shell
 ```sh
 sudo usermod -s /usr/pkg/bin/bash username
 ```
