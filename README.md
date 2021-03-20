@@ -350,3 +350,32 @@ Add to **/etc/rc.conf**:
 ```
 xdm=YES
 ```
+
+### Set up `ssh`
+
+Add to **/etc/rc.conf**:
+```
+sshd=YES
+```
+
+Add to **/etc/ssh/ssh_config**:
+```
+
+Host *.local
+   CheckHostIP no
+```
+
+Modify **/etc/ssh/sshd_config**:
+```
+#PasswordAuthentication yes
+```
+```
+PasswordAuthentication no
+```
+and
+```
+UsePam yes
+```
+```
+UsePam no
+```
