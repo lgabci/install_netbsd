@@ -32,7 +32,7 @@ Create **/usr/pkg/etc/doas.conf**:
 Let **wheel** group use `doas`:
 ```
 # Allow wheel by default
-permit persist keepenv :wheel
+permit keepenv :wheel
 
 # allow reboot and halt
 permit nopass keepenv :wheel as root cmd /sbin/shutdown args -p now
