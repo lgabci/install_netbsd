@@ -23,19 +23,20 @@ pkg_add estd
 cp /usr/pkg/share/examples/rc.d/estd /etc/rc.d/
 /etc/rc.d/estd restart
 ```
-### Install `sudo`:
+### Install `doas`:
 ```sh
-pkg_add sudo
-visudo
+pkg_add doas
 ```
-Remove comment, to let **wheel** group use `sudo`:
+
+Create **/usr/pkg/etc/doas.conf**:
+Let **wheel** group use `doas`:
 ```
-## Uncomment to allow members of group wheel to execute any command
-# %wheel ALL=(ALL) ALL
-```
-```
-## Uncomment to allow members of group wheel to execute any command
-%wheel ALL=(ALL) ALL
+# Allow wheel by default
+permit persist keepenv :wheel
+
+# allow reboot and halt
+permit nopass keepenv :wheel as root cmd /sbin/shutdown args -p now
+permit nopass keepenv :wheel as root cmd /sbin/shutdown args -r now
 ```
 
 ### Create user
@@ -48,12 +49,12 @@ passwd <username>
 
 ### Set up timezone
 ```sh
-sudo ln -s /etc/localtime /usr/share/zoneinfo/Europe/Budapest
+doas ln -s /etc/localtime /usr/share/zoneinfo/Europe/Budapest
 ```
 
 ### Install pkgin
 ```sh
-sudo pkg_add pkgin
+doas pkg_add pkgin
 ```
 
 Modify **/usr/pkg/etc/pkgin/repositories.conf**:
@@ -66,15 +67,15 @@ https://ftp.netbsd.org/pub/pkgsrc/packages/NetBSD/$arch/9.1/All
 
 Update packages:
 ```sh
-sudo pkgin update
-sudo pkgin upgrade
+doas pkgin update
+doas pkgin upgrade
 ```
 
 ### Set up WPA
 
 Install `wpa_supplicant`:
 ```sh
-sudo pkd_add wpa_supplicant
+doas pkd_add wpa_supplicant
 ```
 
 Modify **/etc/wpa_supplicant.conf**:
@@ -125,12 +126,12 @@ dhcpcd_flags="-q -b <NIC> <NIC>"
 
 ### Install necessary packages:
 ```sh
-sudo pkg_add bash bash_completion git icewm firefox emacs vim
+doas pkg_add bash bash_completion git icewm firefox emacs vim
 ```
 
 Set `bash` for *username*'s shell
 ```sh
-sudo usermod -s /usr/pkg/bin/bash username
+doas usermod -s /usr/pkg/bin/bash username
 ```
 
 Create **~/.gitconfig**:
@@ -237,8 +238,8 @@ NetworkStatusDevice="wm0 ath0"
 TimeFormat="%H:%M"
 DateFormat="%a %Y.%m.%d."
 WorkspaceNames=" 1 ", " 2 ", " 3 ", " 4 "
-ShutdownCommand="sudo /sbin/shutdown -p now"
-RebootCommand="sudo /sbin/shutdown -r now"
+ShutdownCommand="doas /sbin/shutdown -p now"
+RebootCommand="doas /sbin/shutdown -r now"
 SuspendCommand="/usr/sbin/zzz"
 ```
 Create **~/.emacs.d/init.el**:
