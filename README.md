@@ -379,3 +379,17 @@ UsePam yes
 ```
 UsePam no
 ```
+
+### Disable `cgd` (cryptographic device driver)
+
+Add to **/etc/rc.conf**:
+```
+cgd=NO
+```
+
+### Disable `raidframe`
+
+Add to **/etc/rc.conf**:
+```
+raidframe=NO
+```
