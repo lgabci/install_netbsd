@@ -38,7 +38,18 @@ Remove comment, to let **wheel** group use `sudo`:
 %wheel ALL=(ALL) ALL
 ```
 
+### Create user
+```sh
+useradd -m <username>
+passwd <username>
+```
+
 ## First steps with user
+
+### Set up timezone
+```sh
+sudo ln -s /etc/localtime /usr/share/zoneinfo/Europe/Budapest
+```
 
 ### Install pkgin
 ```sh
@@ -52,6 +63,8 @@ https://cdn.netbsd.org/pub/pkgsrc/packages/NetBSD/$arch/9.0/All
 ```
 https://ftp.netbsd.org/pub/pkgsrc/packages/NetBSD/$arch/9.1/All
 ```
+
+Update packages:
 ```sh
 sudo pkgin update
 sudo pkgin upgrade
