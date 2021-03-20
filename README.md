@@ -59,6 +59,11 @@ sudo pkgin upgrade
 
 ### Set up WPA
 
+Install `wpa_supplicant`:
+```sh
+sudo pkd_add wpa_supplicant
+```
+
 Create **/etc/wpa_supplicant.conf**:
 ```
 ctrl_interface=/var/run/wpa_supplicant
