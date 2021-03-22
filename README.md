@@ -8,7 +8,20 @@ NetBSD installation and first configuration
 
 ### Set up PKG URL
 ```sh
-echo "PKG_PATH=ftp://ftp.NetBSD.org/pub/pkgsrc/packages/$(uname)/$(uname -m)/$(uname -r)/All/" >> /etc/pkg_install.conf
+echo "PKG_PATH=https://ftp.NetBSD.org/pub/pkgsrc/packages/$(uname)/$(uname -m)/$(uname -r)/All/" >> /etc/pkg_install.conf
+```
+
+### Install pkgin
+```sh
+pkg_add pkgin
+```
+
+Modify **/usr/pkg/etc/pkgin/repositories.conf**:
+```
+https://cdn.netbsd.org/pub/pkgsrc/packages/NetBSD/$arch/9.0/All
+```
+```
+https://ftp.netbsd.org/pub/pkgsrc/packages/NetBSD/$arch/9.1/All
 ```
 
 ### Set up CPU frequency scaling:
@@ -19,13 +32,13 @@ estd_flags=""
 ```
 
 ```sh
-pkg_add estd
+pkgin install estd
 cp /usr/pkg/share/examples/rc.d/estd /etc/rc.d/
 /etc/rc.d/estd restart
 ```
 ### Install `doas`:
 ```sh
-pkg_add doas
+pkgin install doas
 ```
 
 Create **/usr/pkg/etc/doas.conf**:
@@ -52,19 +65,6 @@ passwd <username>
 doas ln -s /etc/localtime /usr/share/zoneinfo/Europe/Budapest
 ```
 
-### Install pkgin
-```sh
-doas pkg_add pkgin
-```
-
-Modify **/usr/pkg/etc/pkgin/repositories.conf**:
-```
-https://cdn.netbsd.org/pub/pkgsrc/packages/NetBSD/$arch/9.0/All
-```
-```
-https://ftp.netbsd.org/pub/pkgsrc/packages/NetBSD/$arch/9.1/All
-```
-
 Update packages:
 ```sh
 doas pkgin update
@@ -75,7 +75,7 @@ doas pkgin upgrade
 
 Install `wpa_supplicant`:
 ```sh
-doas pkd_add wpa_supplicant
+doas pkgin install wpa_supplicant
 ```
 
 Modify **/etc/wpa_supplicant.conf**:
@@ -126,7 +126,7 @@ dhcpcd_flags="-q -b <NIC> <NIC>"
 
 ### Install necessary packages:
 ```sh
-doas pkg_add bash bash_completion git icewm firefox emacs vim
+doas pkgin install bash bash_completion git icewm firefox emacs vim
 ```
 
 Set `bash` for *username*'s shell
