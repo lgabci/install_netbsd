@@ -8,7 +8,7 @@ NetBSD installation and first configuration
 
 ### Set up PKG URL
 ```sh
-echo "PKG_PATH=https://ftp.NetBSD.org/pub/pkgsrc/packages/$(uname)/$(uname -m)/$(uname -r)/All/" >> /etc/pkg_install.conf
+echo "PKG_PATH=https://ftp.NetBSD.org/pub/pkgsrc/packages/NetBSD/amd64/9.1/All/" >> /etc/pkg_install.conf
 ```
 
 ### Install pkgin
@@ -408,7 +408,7 @@ Add to **/etc/rc.conf**:
 raidframe=NO
 ```
 
-### Add audio volumne script
+### Add audio volume script
 Add to **~/bin/vol.sh**:
 ```sh
 #!/bin/sh
