@@ -65,15 +65,19 @@ cp /usr/pkg/share/examples/rc.d/estd /etc/rc.d/
 pkgin install doas
 ```
 
+Set file permission
+```sh
+chmod 600 /usr/pkg/etc/doas.conf
+```
+
 Create **/usr/pkg/etc/doas.conf**:
 Let **wheel** group use `doas`:
 ```
-# Allow wheel by default
+# allow wheel by default
 permit keepenv :wheel
 
-# allow reboot and halt
+# allow shutdown
 permit nopass keepenv :wheel as root cmd /sbin/shutdown args -p now
-permit nopass keepenv :wheel as root cmd /sbin/shutdown args -r now
 ```
 
 ### Create user
