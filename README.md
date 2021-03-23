@@ -6,9 +6,27 @@ NetBSD installation and first configuration
 
 ## First steps with root
 
-### Set up PKG URL
+### Change password
 ```sh
-echo "PKG_PATH=https://ftp.NetBSD.org/pub/pkgsrc/packages/NetBSD/amd64/9.1/All/" >> /etc/pkg_install.conf
+passwd
+```
+
+### Set up PKG URL
+Create **/etc/pkg_install.conf**:
+```
+PKG_PATH=https://ftp.NetBSD.org/pub/pkgsrc/packages/NetBSD/amd64/9.1/All/
+```
+
+### Set up network without WPA
+Add to **/etc/rc.conf**:
+```
+dhcpcd=YES
+dhcpcd_flags="-q -b wm0 ath0"
+```
+
+Restart network:
+```sh
+sh /etc/rc.d/network restart
 ```
 
 ### Install pkgin
@@ -22,6 +40,12 @@ https://cdn.netbsd.org/pub/pkgsrc/packages/NetBSD/$arch/9.0/All
 ```
 ```
 https://ftp.netbsd.org/pub/pkgsrc/packages/NetBSD/$arch/9.1/All
+```
+
+Update packages:
+```sh
+doas pkgin update
+doas pkgin upgrade
 ```
 
 ### Set up CPU frequency scaling:
@@ -54,7 +78,7 @@ permit nopass keepenv :wheel as root cmd /sbin/shutdown args -r now
 
 ### Create user
 ```sh
-useradd -m <username>
+useradd -m -G wheel <username>
 passwd <username>
 ```
 
@@ -62,13 +86,7 @@ passwd <username>
 
 ### Set up timezone
 ```sh
-doas ln -s /etc/localtime /usr/share/zoneinfo/Europe/Budapest
-```
-
-Update packages:
-```sh
-doas pkgin update
-doas pkgin upgrade
+doas ln -fs /usr/share/zoneinfo/Europe/Budapest /etc/localtime
 ```
 
 ### Set up WPA
@@ -119,9 +137,7 @@ network={
 Add to **/etc/rc.conf**:
 ```
 wpa_supplicant=YES
-wpa_supplicant_flags="-B -i <NIC> -c /etc/wpa_supplicant.conf"
-dhcpcd=YES
-dhcpcd_flags="-q -b <NIC> <NIC>"
+wpa_supplicant_flags="-B -i ath0 -c /etc/wpa_supplicant.conf"
 ```
 
 ### Install necessary packages:
@@ -129,9 +145,16 @@ dhcpcd_flags="-q -b <NIC> <NIC>"
 doas pkgin install bash bash_completion git icewm firefox emacs vim
 ```
 
+### Enable `xdm`
+
+Add to **/etc/rc.conf**:
+```
+xdm=YES
+```
+
 Set `bash` for *username*'s shell
 ```sh
-doas usermod -s /usr/pkg/bin/bash username
+doas /usr/sbin/usermod -s /usr/pkg/bin/bash username
 ```
 
 Create **~/.gitconfig**:
@@ -239,8 +262,8 @@ TimeFormat="%H:%M"
 DateFormat="%a %Y.%m.%d."
 WorkspaceNames=" 1 ", " 2 ", " 3 ", " 4 "
 ShutdownCommand="doas /sbin/shutdown -p now"
-RebootCommand="doas /sbin/shutdown -r now"
-SuspendCommand="/usr/sbin/zzz"
+RebootCommand=""
+SuspendCommand=""
 ```
 Create **~/.emacs.d/init.el**:
 ```lisp
@@ -356,13 +379,6 @@ hosts:          files dns mdnsd
 Add to **/etc/rc.conf**:
 ```
 ntpdate=YES
-```
-
-### Enable `xdm`
-
-Add to **/etc/rc.conf**:
-```
-xdm=YES
 ```
 
 ### Set up `ssh`
