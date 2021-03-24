@@ -136,11 +136,6 @@ wpa_supplicant=YES
 wpa_supplicant_flags="-B -i ath0 -c /etc/wpa_supplicant.conf"
 ```
 
-### Install necessary packages:
-```sh
-pkgin install bash bash_completion git icewm firefox emacs vim
-```
-
 ### Enable `xdm`
 
 Add to **/etc/rc.conf**:
@@ -211,6 +206,11 @@ cgd=NO
 Add to **/etc/rc.conf**:
 ```
 raidframe=NO
+```
+
+### Install necessary packages:
+```sh
+pkgin install bash bash_completion git icewm firefox emacs vim
 ```
 
 ### Create user
