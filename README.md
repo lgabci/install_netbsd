@@ -4,7 +4,7 @@ NetBSD installation and first configuration
 ## Installation steps
 
 
-## First steps with root
+## Steps with root
 
 ### Change password
 ```sh
@@ -44,8 +44,8 @@ https://ftp.netbsd.org/pub/pkgsrc/packages/NetBSD/$arch/9.1/All
 
 Update packages:
 ```sh
-doas pkgin update
-doas pkgin upgrade
+pkgin update
+pkgin upgrade
 ```
 
 ### Set up CPU frequency scaling:
@@ -65,11 +65,6 @@ cp /usr/pkg/share/examples/rc.d/estd /etc/rc.d/
 pkgin install doas
 ```
 
-Set file permission
-```sh
-chmod 600 /usr/pkg/etc/doas.conf
-```
-
 Create **/usr/pkg/etc/doas.conf**:
 Let **wheel** group use `doas`:
 ```
@@ -80,24 +75,21 @@ permit keepenv :wheel
 permit nopass keepenv :wheel as root cmd /sbin/shutdown args -p now
 ```
 
-### Create user
+Set file permission
 ```sh
-useradd -m -G wheel <username>
-passwd <username>
+chmod 600 /usr/pkg/etc/doas.conf
 ```
-
-## First steps with user
 
 ### Set up timezone
 ```sh
-doas ln -fs /usr/share/zoneinfo/Europe/Budapest /etc/localtime
+ln -fs /usr/share/zoneinfo/Europe/Budapest /etc/localtime
 ```
 
 ### Set up WPA
 
 Install `wpa_supplicant`:
 ```sh
-doas pkgin install wpa_supplicant
+pkgin install wpa_supplicant
 ```
 
 Modify **/etc/wpa_supplicant.conf**:
@@ -146,7 +138,7 @@ wpa_supplicant_flags="-B -i ath0 -c /etc/wpa_supplicant.conf"
 
 ### Install necessary packages:
 ```sh
-doas pkgin install bash bash_completion git icewm firefox emacs vim
+pkgin install bash bash_completion git icewm firefox emacs vim
 ```
 
 ### Enable `xdm`
@@ -156,10 +148,78 @@ Add to **/etc/rc.conf**:
 xdm=YES
 ```
 
-Set `bash` for *username*'s shell
-```sh
-doas /usr/sbin/usermod -s /usr/pkg/bin/bash username
+### Set up `mdns`:
+
+Add to **/etc/rc.conf**:
 ```
+mdnsd=YES
+```
+
+Modify **/etc/nsswitch.conf**:
+```
+hosts:          files dns
+```
+```
+hosts:          files dns mdnsd
+```
+
+### Enable `ntpdate`
+
+Add to **/etc/rc.conf**:
+```
+ntpdate=YES
+```
+
+### Set up `ssh`
+
+Add to **/etc/rc.conf**:
+```
+sshd=YES
+```
+
+Add to **/etc/ssh/ssh_config**:
+```
+
+Host *.local
+   CheckHostIP no
+```
+
+Modify **/etc/ssh/sshd_config**:
+```
+#PasswordAuthentication yes
+```
+```
+PasswordAuthentication no
+```
+and
+```
+UsePam yes
+```
+```
+UsePam no
+```
+
+### Disable `cgd` (cryptographic device driver)
+
+Add to **/etc/rc.conf**:
+```
+cgd=NO
+```
+
+### Disable `raidframe`
+
+Add to **/etc/rc.conf**:
+```
+raidframe=NO
+```
+
+### Create user
+```sh
+useradd -m -G wheel -s /usr/pkg/bin/bash <username>
+passwd <username>
+```
+
+## Steps with user
 
 Create **~/.gitconfig**:
 ```
@@ -361,71 +421,6 @@ source /usr/pkg/share/vim/vim82/defaults.vim
 set tabstop=8
 set shiftwidth=2
 set expandtab
-```
-
-### Set up **mdns**:
-
-Add to **/etc/rc.conf**:
-```
-mdnsd=YES
-```
-
-Modify **/etc/nsswitch.conf**:
-```
-hosts:          files dns
-```
-```
-hosts:          files dns mdnsd
-```
-
-### Enable `ntpdate`
-
-Add to **/etc/rc.conf**:
-```
-ntpdate=YES
-```
-
-### Set up `ssh`
-
-Add to **/etc/rc.conf**:
-```
-sshd=YES
-```
-
-Add to **/etc/ssh/ssh_config**:
-```
-
-Host *.local
-   CheckHostIP no
-```
-
-Modify **/etc/ssh/sshd_config**:
-```
-#PasswordAuthentication yes
-```
-```
-PasswordAuthentication no
-```
-and
-```
-UsePam yes
-```
-```
-UsePam no
-```
-
-### Disable `cgd` (cryptographic device driver)
-
-Add to **/etc/rc.conf**:
-```
-cgd=NO
-```
-
-### Disable `raidframe`
-
-Add to **/etc/rc.conf**:
-```
-raidframe=NO
 ```
 
 ### Add audio volume script
