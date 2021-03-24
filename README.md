@@ -71,8 +71,9 @@ Let **wheel** group use `doas`:
 # allow wheel by default
 permit keepenv :wheel
 
-# allow shutdown
+# allow shutdown and set sound volume
 permit nopass keepenv :wheel as root cmd /sbin/shutdown args -p now
+permit nopass keepenv :wheel as root cmd /usr/bin/mixerctl
 ```
 
 Set file permission
